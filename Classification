@@ -1,20 +1,20 @@
-//In this part the pre-processed *tif images will be imported, classified and a probablity map will be generated. Release 12.8.2021
+#In this part the pre-processed *tif images will be imported, classified and a probablity map will be generated. Release 12.8.2021
 
 run("Clear Results");
 waitForUser("INFORMATION","This plugin will use a folder of pre-segmented SEM sinusoid images and quantify the fenestrae using WEKA training. It will safe a probability map. NOW choose your image folder with the processed images from plugin 1");
 dir1 = getDirectory("Choose Source Directory");
 
-//folder called classified images will be added to folder to store classified images
+#folder called classified images will be added to folder to store classified images
 classifiedimagespath = dir1 + "classified images";
 File.makeDirectory(classifiedimagespath);
 
-//Folder for fenstera detection "classifier model using contrast image.model" classifier is questied in a dialog  
+#Folder for fenstera detection "classifier model using contrast image.model" classifier is questied in a dialog  
 waitForUser("INFORMATION","In which plugin folder is the file - classifier model using contrast image.model - ? ");
 classifierfolder = getDirectory("Choose folder with classifier file");
 classifierpath = classifierfolder+"classifier model using contrast image.model";
 
 
-//processing starts 
+#processing starts 
 list = getFileList(dir1);
 for (i=0; i<list.length; i++) {
   if (endsWith(list[i], ".tif")) {
