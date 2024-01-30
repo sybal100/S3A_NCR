@@ -1,3 +1,4 @@
+tag_Fiji
 #In this part a folder with *tif images will be imported, and reduced to 2048 x 1515 and the images will be safed
 run("Clear Results");
 dir1 = getDirectory("Choose Source Directory ");
