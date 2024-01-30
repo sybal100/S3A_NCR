@@ -8,10 +8,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import glob
 
-plugin_dir = "/Users/admin/OneDrive - Heinrich-Heine-Universitat Dusseldorf/Dokumente/HHU/Promotion/Experiments/E69 Perfusion male db mice/Picture analysis/Total results"
+plugin_dir = "/Users/filepath"
 
 # define output folder
-res_dir = f'/Users/admin/OneDrive - Heinrich-Heine-Universitat Dusseldorf/Dokumente/HHU/Promotion/Experiments/E69 Perfusion male db mice/Picture analysis/Total analysis/'
+res_dir = f'/Users/filepath'
 
 # create dir for output figures + data
 os.makedirs(res_dir, exist_ok=True)
