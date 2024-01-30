@@ -1,0 +1,14 @@
+#In this part a folder with *tif images will be imported, and reduced to 2048 x 1515 and the images will be safed
+run("Clear Results");
+dir1 = getDirectory("Choose Source Directory ");
+list = getFileList(dir1);
+for (i=0; i<list.length; i++) {
+  if (endsWith(list[i], ".tif")) {
+    open(dir1 + list[i]);
+    title = getTitle();
+    run("Select None");
+    run("Size...", "width=2048 height=1515 depth=1 constrain average interpolation=Bilinear");
+	saveAs("TIFF", dir1+list[i]);
+	close();
+  }
+}
