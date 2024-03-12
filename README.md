@@ -1,5 +1,5 @@
 # S3A_NCR
-Scripts used for publication "XXX"
+Scripts used for manuscript "Semaphorin-3A regulates liver sinusoidal endothelial cell porosity and promotes hepatic steatosis"
 
 Fiji Plugin Analysis:
 1. Scale images (only if your images are too large/not all the same size)
