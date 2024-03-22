@@ -1,70 +1,39 @@
-#In this part the pre-processed *tif images will be imported, classified and a probablity map will be generated. Results (1) total area and (2) of individual fenestrae will be safed in one txt file and the outlines will be safe as a tif file 
+//This plugin imports the classified images and quantifies fenestrae area, diameter and area analysed. A results *.txt file will be saved.
 
 run("Clear Results");
-
-
-#Ask for scaling of images
-
-Dialog.create("Quantification of classifed SEM images");
-Dialog.addMessage("This plugin will use a WEKA probability map and measure the size and diameter of the fenestra and the total area of the ROI and safe the results & display all in the result dialog.");
-");
-Dialog.addMessage("Add the following pixel to nanometer information from the images to continue with the quantification");
-Dialog.addMessage("All images must have the same scaling");
-Dialog.addMessage("");
-
-Dialog.addNumber("Pixel", 0);
-Dialog.addNumber("nanometer", 0);
-Dialog.addCheckbox("Do you want to check the outlines of every analysis", false);
-
-#Finally show the GUI, once all parameters have been added
-Dialog.show();
-
-#Press OK and continue with code and recover values
-inPixel = Dialog.getNumber(); 
-inNanometer = Dialog.getNumber();
-inCheckOption  = Dialog.getCheckbox();
-
-waitForUser("Wake up mate!","Select the folder with the classified images from plugin 2");
+waitForUser("INFORMATION","This plugin will use a WEKA probability map and measure the size and diamter of the fenestra and safe a results file");
 dir1 = getDirectory("Choose Source Directory");
-
-#folder called classified images will be added to folder to store classified images
-resultsfolderpath = dir1 + "results";
-File.makeDirectory(resultsfolderpath);
-
 list = getFileList(dir1);
 for (i=0; i<list.length; i++) {
   if (endsWith(list[i], ".tif")) {
     // Open sample
  
     run("Close All");
-    
     open(dir1 + list[i]);
     run("8-bit");
-    run("Set Scale...", "distance=inPixel known=inNanometer unit=nm");
+    run("Set Scale...", "distance=144 known=1000 unit=nm");
     
     //quantification of total area
     setSlice(1);
 	setAutoThreshold("Default bright");
 	run("Set Measurements...", "area perimeter feret's limit display redirect=None decimal=3");
 	run("Measure");
+	//waitForUser("Action required!","Measurement made?");
 	
 	//quantification of fenestrae
 	setSlice(3);
-
 	setAutoThreshold("Default dark");
 	setOption("BlackBackground", true);
-	setThreshold(160, 255);
+	setThreshold(160, 255); //may need to be adopted, lower threshold = less likely a fenestrae, higher threshold = more likely a fenestrae
 	run("Set Measurements...", "area perimeter feret's display redirect=None decimal=3");
-	//ATTENTION: 1000^2 nm => excludes all objects below ca. 17.84 nm radius (ca. 35.68 nm diameter) 
-	run("Analyze Particles...", "size=1000-Infinity circularity=0.50-1.00 show=Outlines display exclude include slice");
+	run("Analyze Particles...", "size=10-Infinity pixel circularity=0.50-1.00 show=Outlines display exclude include slice");  //size may need to be adopted
 	nametif = list[i] + ".tif";
-	saveAs("Tif",resultsfolderpath+"/"+nametif);
+	saveAs("Tif",dir1+nametif);
 	nametxt = list[i] + ".txt";
-	saveAs("Results",resultsfolderpath+"/"+nametxt);
-	run("Clear Results");
-	if (inCheckOption==1) 
-	 {waitForUser("Wake up mate!","Outlines okay?");
-   }
+	saveAs("Results",dir1+nametxt);
+	//waitForUser("Check if outlines are ok!");
+	//close();
+	//close();
 	run("Close All");
   }
 }
