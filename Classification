@@ -1,20 +1,19 @@
-#In this part the pre-processed *tif images will be imported, classified and a probablity map will be generated. Release 12.8.2021
+//This plugin will import pre-processed *tif images from plugin "Image prep", generate and classify a probablity map.
 
 run("Clear Results");
 waitForUser("INFORMATION","This plugin will use a folder of pre-segmented SEM sinusoid images and quantify the fenestrae using WEKA training. It will safe a probability map. NOW choose your image folder with the processed images from plugin 1");
 dir1 = getDirectory("Choose Source Directory");
 
-#folder called classified images will be added to folder to store classified images
+//folder called classified images will be added to folder to store classified images
 classifiedimagespath = dir1 + "classified images";
 File.makeDirectory(classifiedimagespath);
 
-#Folder for fenstera detection "classifier model using contrast image.model" classifier is questied in a dialog  
+//Folder for fenstera detection "classifier model using contrast image.model" classifier is questied in a dialog  
 waitForUser("INFORMATION","In which plugin folder is the file - classifier model using contrast image.model - ? ");
 classifierfolder = getDirectory("Choose folder with classifier file");
-classifierpath = classifierfolder+"classifier model using contrast image.model";
+classifierpath = classifierfolder+"classifier model using contrast image.model"; //an own classifier may be trained for other SEM setups. This is not included in this plugin.
 
-
-#processing starts 
+//processing starts 
 list = getFileList(dir1);
 for (i=0; i<list.length; i++) {
   if (endsWith(list[i], ".tif")) {
@@ -27,13 +26,13 @@ for (i=0; i<list.length; i++) {
 
     // wait for the plugin to load
 	wait(3000);
-	selectWindow("Trainable Weka Segmentation v3.2.11");
+	selectWindow("Trainable Weka Segmentation v3.3.4"); //may need to be updated
 
     // open classifier
 	call("trainableSegmentation.Weka_Segmentation.loadClassifier", classifierpath);
 	// classify
 	call("trainableSegmentation.Weka_Segmentation.applyClassifier", dir1 ,workfilename, "showResults=true", "storeResults=true", "probabilityMaps=true", classifiedimagespath);
-	//waitForUser("Wake up mate!","Classification any good?");
+	//waitForUser("Is the classification ok?");
 	
 	close();
 	close();
